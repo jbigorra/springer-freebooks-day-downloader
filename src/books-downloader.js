@@ -22,9 +22,14 @@ async function downloadAndSave(bookTitle, bookUrl) {
 
 async function run() {
   const books = JSON.parse(fs.readFileSync("out/sanitzed-books.json", { encoding: "utf-8" }));
-  console.log()
-  for (let i = 0; i < books.length; i++) {
-    const book = books[i];
+  const downloadedBooks = fs.readdirSync("out/books");
+
+  const booksLeft = books.filter((book, i, arr) => { 
+    return !downloadedBooks.some(b => b.replace(/(.epub|e.pdf)/, "") === book.title);
+  });
+
+  for (let i = 0; i < booksLeft.length; i++) {
+    const book = booksLeft[i];
     
     if (book.epub) await downloadAndSave(book.title + ".epub", book.epub);
     else await downloadAndSave(book.title + ".pdf", book.pdf);

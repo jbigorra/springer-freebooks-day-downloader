@@ -5,7 +5,7 @@ const books = JSON.parse(fs.readFileSync("out/books.json", { encoding: "utf-8" }
 const cleanedBooks = books
   .filter(bookPair => bookPair.length > 0)
   .map(bookPair => {
-    const book = { title: bookPair[0].title };
+    const book = { title: bookPair[0].title.replace(/[\\|\/|\:|\?|\"|\<|\>|\||\*]/gi, "_") };
 
     if (bookPair[0].downloadAt.includes("/pdf/")) book.pdf = bookPair[0].downloadAt;
     else if (bookPair[0].downloadAt.includes("/pdf/")) book.epub = bookPair[0].downloadAt;
